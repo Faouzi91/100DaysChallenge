@@ -116,7 +116,6 @@ nr_numbers = int(input(f"How many numbers would you like?\n"))
 
 # combine = list(combine)
 
-# print(combine)
 # random.shuffle(combine)
 
 # print(combine)
@@ -125,7 +124,7 @@ nr_numbers = int(input(f"How many numbers would you like?\n"))
 #   password += item
 
 
-# print(password)
+# print("Your password is: " + password)
 
 
 ###### Her solution ######
@@ -161,7 +160,6 @@ for char in range(0, nr_numbers):
 for char in range(0, nr_symbols):
     password_list += random.choice(symbols)
 
-print(password_list)
 
 random.shuffle(password_list)
 
