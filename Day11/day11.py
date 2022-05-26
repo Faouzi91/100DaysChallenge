@@ -59,6 +59,8 @@
 
 #Hint 14: Ask the user if they want to restart the game. If they answer yes, clear the console and start a new game of blackjack and show the logo from art.py.
 import random
+from replit import clear
+from art import logo
 
 
 def sum(num1, num2):
@@ -66,19 +68,27 @@ def sum(num1, num2):
 
 
 def blackjack():
+  print(logo)
   cards = [11, 2, 3, 4, 5, 6, 7, 8, 9, 10, 10, 10, 10]
   user_choice = []
   cpu_choice = []
-
+  hidden_card = []
+  cpu_num = 0
+  user_num = 0
   for i in range(0, 2):
     user_choice.append(random.choice(cards))
     cpu_choice.append(random.choice(cards))
 
-  print(user_choice, cpu_choice)
+  # hidden_card = cpu_choice.copy()
+  # The op and the bottom does the same
+  # On the botton we are slicing the list with [:]
+  hidden_card = cpu_choice[:]
+  hidden_card[1] = "_"
+  print(user_choice, hidden_card)
 
   sum_user = sum(user_choice[0], user_choice[1])
   computer = sum(cpu_choice[0], cpu_choice[1])
-  print(sum_user)
+  print(f"User: {sum_user}   Computer: {hidden_card[0]}")
 
   should_continue = False
 
@@ -87,28 +97,39 @@ def blackjack():
       draw_more = input(
           "Do you want to get another card? Type 'y' to continue or type 'n' to stop: ")
       if draw_more == "y":
-        sum_user = sum(sum_user, random.choice(cards))
+        user_num = random.choice(cards)
+        sum_user = sum(sum_user, user_num)
         print(sum_user)
         if sum_user > 21:
           print(
               f"You exceeded the required score! You lose. Your score is {sum_user}")
           should_continue = True
-      elif sum_user == 21:
-        should_continue = True
+        elif sum_user == 21:
+          should_continue = True
       elif draw_more == "n":
         while computer < 16:
-          computer = sum(computer, random.choice(cards))
+          cpu_num = random.choice(cards)
+          computer = sum(computer, cpu_num)
+          if computer > 16 and cpu_num == 11:
+            computer -= 10
+          if 11 in cpu_choice and computer > 21:
+            cpu_choice[cpu_choice.indexof(11)] = 1
+            computer = computer - 10
           print(computer)
           if computer > 21:
             print(f"You win!!! user: {sum_user} computer: {computer}")
         should_continue = True
+    elif sum_user == 21:
+      should_continue = True
+
+  if sum_user == 21 and computer < 21:
+    print("You win!!")
 
   if sum_user == 21 and computer == 21:
     print("You lose.")
     print(f"Your total is {user_choice} and the computer total is {computer}")
-  elif sum_user > 21:
-    print(
-        f"You exceeded the required score! You lose. Your score is {sum_user}")
+  elif sum_user == computer:
+    print("It's a draw")
   elif sum_user < computer and computer <= 21:
     print(f"You lose. user: {sum_user} computer: {computer}")
   elif sum_user > computer and sum_user <= 21:
@@ -116,7 +137,8 @@ def blackjack():
   play_again = input(
       "Do you want o continue?: type 'yes' to continue or type 'no' to exit: ")
   if play_again == "yes":
-    blackjack()
+    clear()
+    return blackjack()
   else:
     should_continue = True
 
